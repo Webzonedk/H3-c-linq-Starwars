@@ -10,7 +10,8 @@ namespace Starwars
     class Program
     {
         private static List<Planet> planets = LoadData();
-        static void Main(string[] args)
+
+static void Main(string[] args)
         {
 
 
@@ -58,6 +59,18 @@ namespace Starwars
             //I did not manage to make this by using linq as it needed a subquery to accomplish
             GetPlanetsTask13();
 
+            //Task 14 Select planets where climate == swamp
+            //There is no climate such as swamp, so I will use the terrain instead. and ordering by rotationperiod and name
+            //After getting an introduction to Any(), I have made this one with the subquery included in the lambda
+            GetPlanetsTask14();
+
+            //Task 15 - Select all planets containing double vocals (added Y just to apply the last planet with double vocals)
+            GetPlanetsTask15();
+
+            //Task 16 - Select all planets containing the doubl consonants kk, ll, rr or nn in the name of the planet
+            //Order by name descending (Ord Mantell is missing in the example document)
+            GetPlanetsTask16();
+            
 
             Console.ReadKey();
         }
@@ -273,16 +286,13 @@ namespace Starwars
         }
 
 
+
+
         //Task 13 Select all planets where climate == desert.
         //There is no climate containing Desert, But i will supply planets with terrain such as deserts!
         //I did not manage to make this by using linq as it needed a subquery to accomplish
         private static void GetPlanetsTask13()
         {
-            List<string> searchTerms = new List<string>() { "desert" };
-            //var result = planets.Where(p => (p.Terrain != null) && (p.Terrain.Contains("deserts") || p.Terrain.Contains("desert")));
-            //var result = planets.Where(p => p.Terrain != null && p.Terrain.FindAll("eser")));
-            //var result = from planet in planets from terrain in planet.Terrain
-            //var result = planets.SelectMany(p =>  p.Terrain).Contains("eser");
             Console.WriteLine("Task 13 Select all planets where climate == desert.");
             Console.WriteLine("There is no climate containing Desert, But i will supply planets with terrain such as deserts!");
             Console.WriteLine("I did not manage to make this by using linq as it needed a subquery to accomplish");
@@ -292,6 +302,7 @@ namespace Starwars
                              from t in p.Terrain
                              where t.Contains("desert")
                          select p.Name;
+
             foreach (string planet in result)
             {
                 Console.WriteLine(planet);
@@ -302,7 +313,62 @@ namespace Starwars
 
 
 
+        //Task 14 Select planets where climate == swamp
+        //There is no climate such as swamp, so I will use the terrain instead. and ordering by rotationperiod and name
+        //After getting an introduction to Any(), I have made this one with the subquery included in the lambda
+        private static void GetPlanetsTask14()
+        {
+            Console.WriteLine("Task 14 Select planets where climate == swamp");
+            Console.WriteLine("There is no climate such as swamp, so I will use the terrain instead. and ordering by rotationperiod and name");
+            Console.WriteLine("After getting an introduction to Any(), I have made this one with the subquery included in the lambda");
+            var result = planets.Where(p => p.Terrain != null).Where(p => p.Terrain.Any(str => str.Contains("swamp")))
+                .OrderBy(p => p.RotationPeriod).ThenBy(p => p.Name);
+            foreach (Planet planet in result)
+            {
+                Console.WriteLine(planet.Name);
+            }
+            Console.WriteLine();
+        }
 
+
+
+
+        //Task 15 - Select all planets containing double vocals (added Y just to apply the last planet with double vocals)
+        private static void GetPlanetsTask15()
+        {
+            Regex regEx = new Regex(@"[aA]{2}|[eE]{2}|[iI]{2}|[oO]{2}|[uU]{2}|[yY]{2}");
+            Console.WriteLine("Task 15 - Select all planets containing double vocals. (added Y just to apply the last planet with double vocals)");
+            var result = from planet in planets
+                         let match = regEx.Match(planet.Name)
+                         where match.Success
+                         select planet.Name;
+            foreach (string planet in result)
+            {
+                Console.WriteLine(planet);
+            }
+            Console.WriteLine();
+        }
+
+
+
+
+        //Task 16 - Select all planets containing the doubl consonants kk, ll, rr or nn in the name of the planet
+        //Order by name descending (Ord Mantell is missing in the example document)
+        private static void GetPlanetsTask16() {
+            Regex regEx = new Regex(@"[kK]{2}|[lL]{2}|[rR]{2}|[nN]{2}");
+            Console.WriteLine("Task 16 - Select all planets containing the doubl consonants kk, ll, rr or nn in the name of the planet, Order by name descending");
+            Console.WriteLine("(Ord Mantell is missing in the example document)");
+            var result = from planet in planets
+                         let match = regEx.Match(planet.Name)
+                         where match.Success
+                         orderby planet.Name descending
+                         select planet.Name ;
+            foreach (string planet in result)
+            {
+                Console.WriteLine(planet);
+            }
+            Console.WriteLine();
+        }
 
 
 
