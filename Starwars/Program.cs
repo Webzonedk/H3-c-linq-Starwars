@@ -193,8 +193,9 @@ static void Main(string[] args)
 
 
 
+
         //Task 8 - Select Planets where rotationPeriod <30 or surfacewater > 50 and containing ba in name
-        //order by name,surfacewater,rotationPeriod
+        //order by name,surfacewater, rotationPeriod
         private static void GetPlanetsTask8()
         {
             var result = planets.Where(p => (p.RotationPeriod < 30 || p.SurfaceWater > 50) && p.Name.Contains("ba"))
