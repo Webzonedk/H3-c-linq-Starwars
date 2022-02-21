@@ -47,12 +47,16 @@ namespace Starwars
             GetPlanetsTask10();
 
             //Task 11 - Select planets where rotationperiod is == 0 by using exept
-            GetPlanetTask11();
+            GetPlanetsTask11();
 
             //Task 12 - Select planets starting with a or ending with s
             //and join with planets with rainforest terrain
-            GetPlanetTask12();
+            GetPlanetsTask12();
 
+            //Task 13 Select all planets where climate == desert.
+            //There is no climate containing Desert, But i will supply planets with terrain such as deserts!
+            //I did not manage to make this by using linq as it needed a subquery to accomplish
+            GetPlanetsTask13();
 
 
             Console.ReadKey();
@@ -226,7 +230,7 @@ namespace Starwars
 
 
         //Task 11 - Select planets where rotationperiod is == 0 by using exept
-        private static void GetPlanetTask11()
+        private static void GetPlanetsTask11()
         {
             var result = planets.Except(planets.Where(p => (p.RotationPeriod > 0)));
             Console.WriteLine("Task 11 - Select planets where rotationperiod is == 0 by using exept");
@@ -242,7 +246,7 @@ namespace Starwars
 
         //Task 12 - Select planets starting with a or ending with s,
         //and join with planets with rainforest terrain
-        private static void GetPlanetTask12()
+        private static void GetPlanetsTask12()
         {
             var result1 = planets.Where(p => p.Name.StartsWith("a") || p.Name.StartsWith("A") || p.Name.EndsWith("s") || p.Name.EndsWith("S"));
             var result2 = planets.Where(p => p.Terrain != null && p.Terrain.Contains("rainforests"));
@@ -267,6 +271,36 @@ namespace Starwars
             }
             Console.WriteLine();
         }
+
+
+        //Task 13 Select all planets where climate == desert.
+        //There is no climate containing Desert, But i will supply planets with terrain such as deserts!
+        //I did not manage to make this by using linq as it needed a subquery to accomplish
+        private static void GetPlanetsTask13()
+        {
+            List<string> searchTerms = new List<string>() { "desert" };
+            //var result = planets.Where(p => (p.Terrain != null) && (p.Terrain.Contains("deserts") || p.Terrain.Contains("desert")));
+            //var result = planets.Where(p => p.Terrain != null && p.Terrain.FindAll("eser")));
+            //var result = from planet in planets from terrain in planet.Terrain
+            //var result = planets.SelectMany(p =>  p.Terrain).Contains("eser");
+            Console.WriteLine("Task 13 Select all planets where climate == desert.");
+            Console.WriteLine("There is no climate containing Desert, But i will supply planets with terrain such as deserts!");
+            Console.WriteLine("I did not manage to make this by using linq as it needed a subquery to accomplish");
+
+            var result = from p in planets
+                         where p.Terrain != null
+                             from t in p.Terrain
+                             where t.Contains("desert")
+                         select p.Name;
+            foreach (string planet in result)
+            {
+                Console.WriteLine(planet);
+            }
+            Console.WriteLine();
+        }
+
+
+
 
 
 
