@@ -340,8 +340,7 @@ static void Main(string[] args)
             Regex regEx = new Regex(@"[aA]{2}|[eE]{2}|[iI]{2}|[oO]{2}|[uU]{2}|[yY]{2}");
             Console.WriteLine("Task 15 - Select all planets containing double vocals. (added Y just to apply the last planet with double vocals)");
             var result = from planet in planets
-                         let match = regEx.Match(planet.Name)
-                         where match.Success
+                         where regEx.IsMatch(planet.Name)
                          select planet.Name;
             foreach (string planet in result)
             {
@@ -360,8 +359,7 @@ static void Main(string[] args)
             Console.WriteLine("Task 16 - Select all planets containing the doubl consonants kk, ll, rr or nn in the name of the planet, Order by name descending");
             Console.WriteLine("(Ord Mantell is missing in the example document)");
             var result = from planet in planets
-                         let match = regEx.Match(planet.Name)
-                         where match.Success
+                         where regEx.IsMatch(planet.Name)
                          orderby planet.Name descending
                          select planet.Name ;
             foreach (string planet in result)
